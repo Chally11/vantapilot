@@ -11,7 +11,7 @@ from openpilot.system.ui.widgets import Widget
 # Constants
 SET_SPEED_NA = 255
 KM_TO_MILE = 0.621371
-CRUISE_DISABLED_CHAR = '–'
+CRUISE_DISABLED_CHAR = '*'
 
 
 @dataclass(frozen=True)
