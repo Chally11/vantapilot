@@ -7,6 +7,7 @@ from openpilot.system.ui.widgets.confirm_dialog import ConfirmDialog
 from openpilot.system.ui.lib.application import gui_app
 from openpilot.system.ui.lib.multilang import tr, tr_noop
 from openpilot.system.ui.widgets import DialogResult
+from bleak import BleakScanner
 
 
 class CustomLayout(Widget):
@@ -21,18 +22,19 @@ class CustomLayout(Widget):
       description=lambda: tr("SCAN"),
       callback=self._on_scan,
     )
-    
-    self._on_enable_ui_debug(self._params.get_bool("ShowDebugInfo"))
+
+    def _on_scan(self):
+      try:
+        devices = await BleakScanner.discover(timeout=4.0)
+        for device in devices:
+          # Do whatever
+        return devices
+      except Exception as e:
+        print("Bluetooth scan failed: {e}")
+        return []
 
     self._scroller = Scroller([
-      self._adb_toggle,
-      self._ssh_toggle,
-      self._ssh_keys,
-      self._joystick_toggle,
-      self._long_maneuver_toggle,
-      self._lat_maneuver_toggle,
-      self._alpha_long_toggle,
-      self._ui_debug_toggle,
+      self._scan_button,
     ], line_separator=True, spacing=0)
 
     # Toggles should be not available to change in onroad state
