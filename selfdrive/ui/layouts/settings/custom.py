@@ -8,13 +8,6 @@ from openpilot.system.ui.lib.application import gui_app
 from openpilot.system.ui.lib.multilang import tr, tr_noop
 from openpilot.system.ui.widgets import DialogResult
 
-# Description constants
-DESCRIPTIONS = {
-  'scan_bluetooth': tr_noop(
-    "Scans one time and lists currently broadcasting bluetooth devices."
-  ),
-}
-
 
 class CustomLayout(Widget):
   def __init__(self):
@@ -23,12 +16,10 @@ class CustomLayout(Widget):
     self._is_release = self._params.get_bool("IsReleaseBranch")
 
     # Build items and keep references for callbacks/state updates
-    self._scan_toggle = toggle_item(
+    self._scan_toggle = button_item(
       lambda: tr("Scan Bluetooth"),
-      description=lambda: tr(DESCRIPTIONS["enable_adb"]),
-      initial_state=self._params.get_bool("AdbEnabled"),
-      callback=self._on_enable_adb,
-      enabled=ui_state.is_offroad,
+      description=lambda: tr("SCAN"),
+      callback=self._on_scan,
     )
     
     self._on_enable_ui_debug(self._params.get_bool("ShowDebugInfo"))
