@@ -16,7 +16,7 @@ class CustomLayout(Widget):
     self._is_release = self._params.get_bool("IsReleaseBranch")
 
     # Build items and keep references for callbacks/state updates
-    self._scan_toggle = button_item(
+    self._scan_button = button_item(
       lambda: tr("Scan Bluetooth"),
       description=lambda: tr("SCAN"),
       callback=self._on_scan,
