@@ -1,5 +1,4 @@
 from openpilot.common.params import Params
-from openpilot.selfdrive.ui.widgets.ssh_key import ssh_key_item
 from openpilot.selfdrive.ui.ui_state import ui_state
 from openpilot.system.ui.widgets import Widget
 from openpilot.system.ui.widgets.list_view import toggle_item
@@ -17,66 +16,21 @@ DESCRIPTIONS = {
 }
 
 
-class DeveloperLayout(Widget):
+class CustomLayout(Widget):
   def __init__(self):
     super().__init__()
     self._params = Params()
     self._is_release = self._params.get_bool("IsReleaseBranch")
 
     # Build items and keep references for callbacks/state updates
-    self._adb_toggle = toggle_item(
-      lambda: tr("Enable ADB"),
+    self._scan_toggle = toggle_item(
+      lambda: tr("Scan Bluetooth"),
       description=lambda: tr(DESCRIPTIONS["enable_adb"]),
       initial_state=self._params.get_bool("AdbEnabled"),
       callback=self._on_enable_adb,
       enabled=ui_state.is_offroad,
     )
-
-    # SSH enable toggle + SSH key management
-    self._ssh_toggle = toggle_item(
-      lambda: tr("Enable SSH"),
-      description="",
-      initial_state=self._params.get_bool("SshEnabled"),
-      callback=self._on_enable_ssh,
-    )
-    self._ssh_keys = ssh_key_item(lambda: tr("SSH Keys"), description=lambda: tr(DESCRIPTIONS["ssh_key"]))
-
-    self._joystick_toggle = toggle_item(
-      lambda: tr("Joystick Debug Mode"),
-      description="",
-      initial_state=self._params.get_bool("JoystickDebugMode"),
-      callback=self._on_joystick_debug_mode,
-      enabled=ui_state.is_offroad,
-    )
-
-    self._long_maneuver_toggle = toggle_item(
-      lambda: tr("Longitudinal Maneuver Mode"),
-      description="",
-      initial_state=self._params.get_bool("LongitudinalManeuverMode"),
-      callback=self._on_long_maneuver_mode,
-    )
-
-    self._lat_maneuver_toggle = toggle_item(
-      lambda: tr("Lateral Maneuver Mode"),
-      description="",
-      initial_state=self._params.get_bool("LateralManeuverMode"),
-      callback=self._on_lat_maneuver_mode,
-    )
-
-    self._alpha_long_toggle = toggle_item(
-      lambda: tr("openpilot Longitudinal Control (Alpha)"),
-      description=lambda: tr(DESCRIPTIONS["alpha_longitudinal"]),
-      initial_state=self._params.get_bool("AlphaLongitudinalEnabled"),
-      callback=self._on_alpha_long_enabled,
-      enabled=lambda: not ui_state.engaged,
-    )
-
-    self._ui_debug_toggle = toggle_item(
-      lambda: tr("UI Debug Mode"),
-      description="",
-      initial_state=self._params.get_bool("ShowDebugInfo"),
-      callback=self._on_enable_ui_debug,
-    )
+    
     self._on_enable_ui_debug(self._params.get_bool("ShowDebugInfo"))
 
     self._scroller = Scroller([
